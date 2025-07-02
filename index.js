@@ -4,6 +4,7 @@
 // index.js
 require('dotenv').config();
 const { Telegraf } = require('telegraf');
+const { markup } = require('telegraf');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -21,9 +22,23 @@ const getUserSession = (id) => {
   return sessions[id];
 };
 
-// Start
+// // Start
+// bot.start((ctx) => {
+//   ctx.reply(`Hi 👋🏽 ${ctx.from.first_name}, welcome to Vire Agency Bot.\n\nPlease choose an action:\n1️⃣ /checkin\n2️⃣ /checkout\n3️⃣ /logtask\n4️⃣ /viewtasks`);
+// });
+
+//Keyboard Menu to start
 bot.start((ctx) => {
-  ctx.reply(`Hi 👋🏽 ${ctx.from.first_name}, welcome to Vire Agency Bot.\n\nPlease choose an action:\n1️⃣ /checkin\n2️⃣ /checkout\n3️⃣ /logtask\n4️⃣ /viewtasks`);
+  ctx.reply(
+      `Hi 👋🏽 ${ctx.from.first_name}, welcome to Vire Agency Bot.\n\nPlease Choose an action:`,
+      Markup.keyboard([
+        ['/checkin', '/checkout'],
+        ['/logtask', '/viewtasks'],
+        ['/contacthr', '/help']
+      ])
+          .resize()
+          .oneTime()
+  );
 });
 
 // Checkin Command
@@ -63,7 +78,28 @@ bot.command('viewtasks', (ctx) => {
   ctx.reply(message);
 });
 
-// Handle all text inputs
+
+// Contact HR
+bot.command('contacthr', (ctx) => {
+  const session = getUserSession(ctx.from.id);
+  session.flow = 'contact_hr';
+  ctx.reply('📨 Please describe your concern. HR will be notified.');
+});
+
+// Help
+bot.command('help', (ctx) => {
+  ctx.reply(`
+🆘 Available Commands:
+1️⃣ /checkin – Log start of workday  
+2️⃣ /checkout – Log end of workday  
+3️⃣ /logtask – Submit a task update  
+4️⃣ /viewtasks – See your logs  
+5️⃣ /contacthr – Message HR  
+6️⃣ /help – Show this help menu
+  `);
+});
+
+// Handle all text inputs by text handler
 bot.on('text', (ctx) => {
   const session = getUserSession(ctx.from.id);
   const text = ctx.message.text;
@@ -104,13 +140,22 @@ bot.on('text', (ctx) => {
     return;
   }
 
+  // Contact HR flow
+  if (session.flow === 'contact_hr') {
+    const time = new Date().toLocaleTimeString();
+    session.logs.push({ time, entry: `HR Message: ${text}`, icon: '📨' });
+    session.flow = null;
+    ctx.reply('✅ Message sent to HR. They’ll get back to you soon.');
+    return;
+  }
+
   // Default fallback
-  ctx.reply('❓ I didn’t understand that. Use /checkin, /checkout, /logtask, or /viewtasks.');
+  ctx.reply('❓ I didn’t understand that. Use /checkin, /checkout, /logtask, /viewtasks, or /contacthr.');
 });
 
 // Launch the bot
 bot.launch();
-console.log('🤖 Bot is running...');
+console.log('🤖 Vireworkplace Bot is running...');
 
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'));
