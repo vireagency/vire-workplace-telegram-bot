@@ -23,23 +23,23 @@ const getUserSession = (id) => {
 };
 
 // // Start
-// bot.start((ctx) => {
-//   ctx.reply(`Hi 👋🏽 ${ctx.from.first_name}, welcome to Vire Agency Bot.\n\nPlease choose an action:\n1️⃣ /checkin\n2️⃣ /checkout\n3️⃣ /logtask\n4️⃣ /viewtasks`);
-// });
+bot.start((ctx) => {
+  ctx.reply(`Hi 👋🏽 ${ctx.from.first_name}, welcome to Vire Agency Bot.\n\nPlease choose an action:\n1️⃣ /checkin\n2️⃣ /checkout\n3️⃣ /logtask\n4️⃣ /viewtasks`);
+});
 
 //Keyboard Menu to start
-bot.start((ctx) => {
-  ctx.reply(
-      `Hi 👋🏽 ${ctx.from.first_name}, welcome to Vire Agency Bot.\n\nPlease Choose an action:`,
-      Markup.keyboard([
-        ['/checkin', '/checkout'],
-        ['/logtask', '/viewtasks'],
-        ['/contacthr', '/help']
-      ])
-          .resize()
-          .oneTime()
-  );
-});
+// bot.start((ctx) => {
+//   ctx.reply(
+//       `Hi 👋🏽 ${ctx.from.first_name}, welcome to Vire Agency Bot.\n\nPlease Choose an action:`,
+//       Markup.keyboard([
+//         ['/checkin', '/checkout'],
+//         ['/logtask', '/viewtasks'],
+//         ['/contacthr', '/help']
+//       ])
+//           .resize()
+//           .oneTime()
+//   );
+// });
 
 // Checkin Command
 bot.command('checkin', (ctx) => {
