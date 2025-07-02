@@ -157,6 +157,18 @@ bot.on('text', (ctx) => {
 bot.launch();
 console.log('🤖 Vireworkplace Bot is running...');
 
+
+// Set the command menu for all users
+bot.telegram.setMyCommands([
+  { command: 'checkin', description: 'Check in for the day' },
+  { command: 'checkout', description: 'Check out for the day' },
+  { command: 'logtask', description: 'Log your task' },
+  { command: 'viewtasks', description: 'View today\'s tasks' },
+  { command: 'contacthr', description: 'Send a message to HR' },
+  { command: 'help', description: 'Get help and usage guide' }
+]);
+
+
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
