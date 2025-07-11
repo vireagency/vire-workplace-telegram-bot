@@ -45,7 +45,7 @@ bot.start((ctx) => {
 bot.command('checkin', (ctx) => {
   const session = getUserSession(ctx.from.id);
   session.flow = 'checkin_location';
-  ctx.reply('📍 Please enter your location or type "Skip"');
+  ctx.reply('🕔 What time are you starting work today?  (e.g., 8:30)');
 });
 
 // Checkout Command
@@ -59,7 +59,7 @@ bot.command('checkout', (ctx) => {
 bot.command('logtask', (ctx) => {
   const session = getUserSession(ctx.from.id);
   session.flow = 'log_task';
-  ctx.reply('📝 Please enter your task update:');
+  ctx.reply('📝 Please enter your task update for today:');
 });
 
 // View Tasks
